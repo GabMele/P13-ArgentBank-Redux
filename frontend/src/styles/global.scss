@@ -1,0 +1,33 @@
+// Global styles for the entire application
+
+// Sets the default font for the page and smooths the text rendering
+html {
+  font-family: Avenir, Helvetica, Arial, sans-serif; // Defines the font stack
+  -webkit-font-smoothing: antialiased; // Better font rendering on WebKit
+  -moz-osx-font-smoothing: grayscale; // Better font rendering on Firefox (macOS)
+  text-align: center; // Centers text horizontally by default
+  color: #2c3e50; // Sets the default text color (dark grey)
+}
+
+// Body styling to set the layout for the page
+body {
+  margin: 0; // Removes default margin around the body element
+  display: flex; // Makes the body a flex container for layout
+  flex-direction: column; // Stacks children vertically (useful for full-page layouts)
+  min-height: 100vh; // Ensures the body takes at least 100% of the viewport height
+}
+
+.sr-only {
+  color: red;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  -webkit-clip-path: inset(100%) !important; /* For browser compatibility */
+  clip-path: inset(100%) !important; /* For browser compatibility */
+  white-space: nowrap !important;
+}
