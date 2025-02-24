@@ -1,20 +1,50 @@
-// src/services/apiService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001';
+// Create an axios instance with default configuration
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-const getUserProfile = async () => {
-  try {
-    const response = await axios.post(`${API_URL}/profile`, {
-      // Add authorization token or necessary headers here
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    throw new Error(error.response ? error.response.data.message : 'Unknown error');
+// Add request interceptor to inject auth token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    console.log("api config", config);
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-};
+);
 
-export default {
-  getUserProfile,
-};
+// Add response interceptor to handle common errors
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Handle expired tokens or authentication errors
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      // Optionally redirect to login page
+      // window.location.href = '/sign-in';
+    }
+    
+    // Handle server errors
+    if (error.response?.status >= 500) {
+      console.error('Server error:', error.response?.data);
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+export default api;

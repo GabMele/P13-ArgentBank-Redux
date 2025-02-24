@@ -1,3 +1,5 @@
+// src/pages/SignInPage/index.jsx
+
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/authThunks';
@@ -7,7 +9,10 @@ import styles from './SignInPage.module.scss';
 const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, user } = useSelector((state) => state.auth);
+  const { loading, error, user } = useSelector((state) => state.user);
+
+  console.log("user", user);
+
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
   // Redirect if already logged in
