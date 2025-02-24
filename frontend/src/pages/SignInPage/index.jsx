@@ -11,13 +11,16 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const { loading, error, user } = useSelector((state) => state.user);
 
-  console.log("user", user);
+  
 
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
   // Redirect if already logged in
   useEffect(() => {
-    if (user) navigate('/profile');
+    console.log("user", user);
+    if (user) {
+      navigate('/profile');
+    }
   }, [user, navigate]);
 
   const handleChange = (e) => {
@@ -28,8 +31,8 @@ const SignInPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(loginUser(credentials)).unwrap();
-      navigate('/profile');
+      dispatch(loginUser(credentials));
+      // navigate('/profile');
     } catch (error) {
       console.error('Login failed:', error);
     }

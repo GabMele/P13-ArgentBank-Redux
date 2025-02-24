@@ -19,7 +19,7 @@ export const authService = {
   },
 
   getProfile: async () => {
-    const response = await api.get('/profile'); // Headers are handled by axiosConfig
+    const response = await api.post('/profile'); // Headers are handled by axiosConfig
     return response.data;
   }
 };
