@@ -1,7 +1,9 @@
+// src/main.jsx
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';  // Import Provider from 'react-redux'
-import { store } from '@/store/index.js';  // Import the Redux store
+import { store } from '@/store/store.js';  // Import the Redux store
 import './styles/global.scss';
 import App from '@/App.jsx';
 

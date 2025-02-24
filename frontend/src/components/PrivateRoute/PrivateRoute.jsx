@@ -1,0 +1,14 @@
+import { Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = Boolean(localStorage.getItem('token')); // Example auth check
+
+  return isAuthenticated ? children : <Navigate to="/sign-in" replace />;
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default PrivateRoute;
