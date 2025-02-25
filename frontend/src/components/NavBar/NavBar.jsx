@@ -1,15 +1,21 @@
 import styles from './NavBar.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { logoutUser } from '@/store/authThunks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import argentBankLogo from '@/assets/argentBankLogo.png';
+import { fetchUserProfile } from '../../store/authThunks';
 
 const NavBar = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+      dispatch(fetchUserProfile());
+    }, [dispatch]);
 
   const handleLogout = () => {
     dispatch(logoutUser());
