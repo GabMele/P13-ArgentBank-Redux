@@ -1,0 +1,84 @@
+// src/components/Dashboard/Accounts/Accounts.module.scss
+
+.accountsWrapper {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  //height: 100vh;
+}
+
+.account {
+
+  &Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    background-color: #fff;
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  &ContentWrapper {
+    width: 100%;
+    flex: 1;
+  }
+
+  &Title {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: normal;
+  }
+
+  &Amount {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+
+    &Description {
+      margin: 0;
+    }
+  }
+
+  &Cta {
+    width: 100%;
+  }
+
+  &TransactionButton {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    border-color: #00bc77;
+    background-color: #00bc77;
+    color: #fff;
+  }
+}
+
+
+@media (min-width: 720px) {
+  .account {
+    &Container {
+      flex-direction: row;
+    }
+
+    &Cta {
+      flex: 0;
+    }
+
+    &TransactionButton {
+      width: 200px;
+    }
+  }
+}

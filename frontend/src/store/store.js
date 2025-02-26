@@ -7,5 +7,6 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
   },
+  devTools: import.meta.env.MODE !== 'production', // Compatible Vite
 });
 

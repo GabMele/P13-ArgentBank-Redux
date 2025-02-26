@@ -8,9 +8,20 @@ import './styles/global.scss';
 import App from '@/App.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
+
     <Provider store={store}>  {/* Wrap App with Redux Provider */}
       <App />
     </Provider>
-  </StrictMode>
+
+
+{/*   
+  <StrictMode>
+    <Provider store={store}> 
+      <App />
+    </Provider>
+  </StrictMode> */}
+
+  </>
+  
 );

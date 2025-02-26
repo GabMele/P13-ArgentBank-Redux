@@ -1,5 +1,4 @@
 // src/pages/SignInPage/index.jsx
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/authThunks';
@@ -10,16 +9,11 @@ const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, user } = useSelector((state) => state.user);
-
-  
-
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
-  // Redirect if already logged in
   useEffect(() => {
-    console.log("user", user);
     if (user) {
-      navigate('/profile');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
@@ -28,20 +22,14 @@ const SignInPage = () => {
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      dispatch(loginUser(credentials));
-      // navigate('/profile');
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+    dispatch(loginUser(credentials));
   };
 
   return (
     <div className={styles.signInContainer}>
       <h2>Sign In</h2>
-      
       {error && <p className={styles.error}>{error}</p>}
 
       <form onSubmit={handleSubmit}>

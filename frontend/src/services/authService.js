@@ -1,5 +1,7 @@
 // src/services/authService.js
-import api from '../api/axiosConfig';
+// import api from '../api/axiosConfig';
+import api from '@/services/apiService';
+
 
 export const authService = {
   login: async (credentials) => {
@@ -19,7 +21,7 @@ export const authService = {
   },
 
   getProfile: async () => {
-    const response = await api.post('/profile'); // Headers are handled by axiosConfig
+    const response = await api.post('/profile'); 
     return response.data;
   }
 };

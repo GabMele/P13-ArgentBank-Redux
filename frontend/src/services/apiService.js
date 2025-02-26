@@ -1,8 +1,10 @@
+// src/services/apiService.js
+
 import axios from 'axios';
 
 // Create an axios instance with default configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1/user',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,7 +18,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    console.log("api config", config);
+    //console.log("api config", config);
 
     return config;
   },
@@ -27,9 +29,7 @@ api.interceptors.request.use(
 
 // Add response interceptor to handle common errors
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     // Handle expired tokens or authentication errors
     if (error.response?.status === 401) {
@@ -43,7 +43,7 @@ api.interceptors.response.use(
       console.error('Server error:', error.response?.data);
     }
     
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data || error);
   }
 );
 
