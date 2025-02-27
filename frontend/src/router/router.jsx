@@ -1,3 +1,5 @@
+// src/router/router.jsx
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import MainLayout from '@/components/MainLayout/MainLayout';

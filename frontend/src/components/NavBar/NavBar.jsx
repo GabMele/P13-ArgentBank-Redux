@@ -2,8 +2,7 @@
 import styles from './NavBar.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { logoutUser, fetchUserProfile } from '@/store/authThunks';
+import { logoutUser } from '@/store/authThunks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import argentBankLogo from '@/assets/argentBankLogo.png';
@@ -12,11 +11,12 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user?.user);
-  const token = useSelector((state) => state.user.token);
+  
+  // const token = useSelector((state) => state.user.token);
 
-  const state = useSelector((state) => state);
-  console.log("Navbar state", state);
-  console.log("Navbar user", user);
+  //const state = useSelector((state) => state);
+  //console.log("Navbar state", state);
+  console.log("Navbar state.user :", user);
 
 /*
   useEffect(() => {
@@ -26,18 +26,19 @@ const NavBar = () => {
   }, [dispatch, user]);
 */
 
+/*
   useEffect(() => {
     // Check both user and token to determine if we need to fetch profile
     if (token && !user) {
       console.log("✅UseEffect: User not found, fetching profile...");
-      console.log("✅UseEffect before despatch: state:", state);
+      //console.log("✅UseEffect before despatch: state:", state);
       dispatch(fetchUserProfile());
       console.log("✅UseEffect: Profile fetched.");
       console.log("✅UseEffect: User:", user);
-      console.log("✅UseEffect after dispatch: state:", state);
+      //console.log("✅UseEffect after dispatch: state:", state);
     }
   }, [dispatch, user, token]);
-
+*/
 
   const handleLogout = async () => {
     await dispatch(logoutUser()).unwrap(); 

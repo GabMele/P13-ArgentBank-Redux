@@ -12,10 +12,12 @@ const SignInPage = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
 
   useEffect(() => {
-    if (user) {
+    if (user && !loading) {
+      console.log('✅ SignInPage useEffect: User updated: ', user);
       navigate('/dashboard');
+      console.log('✅ SignInPage useEffect: NAVIGATE to /dashboard');
     }
-  }, [user, navigate]);
+  }, [user, loading,navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +26,7 @@ const SignInPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Signin dispatch loginUser with Credentials:', credentials);
     dispatch(loginUser(credentials));
   };
 
@@ -42,6 +45,7 @@ const SignInPage = () => {
             value={credentials.email}
             onChange={handleChange}
             required
+            autoComplete="email"
           />
         </div>
 
@@ -54,6 +58,7 @@ const SignInPage = () => {
             value={credentials.password}
             onChange={handleChange}
             required
+            autoComplete="current-password"
           />
         </div>
 

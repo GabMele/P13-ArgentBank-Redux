@@ -1,8 +1,10 @@
+// src/store/authSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 import { loginUser, signupUser, fetchUserProfile, logoutUser } from './authThunks';
 
 const initialState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem('user')) || null,
   token: localStorage.getItem('token') || null,
   loading: false,
   error: null,
@@ -90,20 +92,40 @@ const handleFulfilled = (state, action) => {
 const handleFulfilled = (state, action) => {
   state.loading = false;
   
+  console.log("✅ AuthSlice Fulfilled response action:", action);
+  console.log("✅ AuthSlice Fulfilled response action.TYPE:", action.type);
   console.log("✅ AuthSlice Fulfilled response action.payload:", action.payload);
+  console.log("✅ AuthSlice Fulfilled check state.user :", state.user);
   // Check if we have the expected data structure
   //if (action.payload) {
     // If user data exists in payload, update the state
+    /*
     if (action.payload.user) {
       state.user = action.payload.user;
     }
-    
-    // If token exists in payload, update the state
+*/
+    if (action.payload.user && action.payload.user !== state.user) {
+      state.user = action.payload.user;
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
+      console.log("✅ AuthSlice Fulfilled + STATE UPDATING, action.payload:", action.payload);
+      console.log("✅ AuthSlice Fulfilled + STATE UPDATED! state.user:", state.user);
+    }
+        
     /*
-    if (action.payload.token) {
+    if (action.payload.token && action.payload.token !== state.token) {
+      console.log("✅ AuthSlice Fulfilled TOKEN STATE UPDATE response action.payload.token:", action.payload.token);
       state.token = action.payload.token;
     }
-      */
+    */
+   
+    if (action.payload.token && action.payload.token !== state.token) {
+      console.log("✅ AuthSlice Fulfilled action:", action.payload);
+      console.log("✅ AuthSlice Fulfilled Redux STATE UPDATED! state.token:", state);
+      state.token = action.payload.token;
+    }
+
+
+
   //}
 };
 
@@ -111,6 +133,7 @@ const handleFulfilled = (state, action) => {
     const handleRejected = (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      console.log("✅ AuthSlice Rejected STATE UPDATED! action.payload:", action.payload);
     };
 
     builder
@@ -126,6 +149,8 @@ const handleFulfilled = (state, action) => {
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
       });
   },
 });

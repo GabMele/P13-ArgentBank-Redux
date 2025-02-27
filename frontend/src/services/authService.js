@@ -5,6 +5,8 @@ import api from '@/services/apiService';
 
 export const authService = {
   login: async (credentials) => {
+    console.log("✅ authService.login() called");
+    console.trace(); 
     const response = await api.post('/login', credentials);
     const token = response.data.body?.token;
     if (token) localStorage.setItem('token', token);
@@ -21,6 +23,8 @@ export const authService = {
   },
 
   getProfile: async () => {
+    console.log("✅ authService.getProfile() called");
+    console.trace(); 
     const response = await api.post('/profile'); 
     return response.data;
   }

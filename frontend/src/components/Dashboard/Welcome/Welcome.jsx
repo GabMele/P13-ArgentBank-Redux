@@ -4,13 +4,14 @@ import { useSelector } from "react-redux";
 import styles from "./Welcome.module.scss";
 
 const Welcome = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
 
-  if (!user) {  
-    return <div>Loading...</div>;
+  if (loading) {  
+    return <h2>Loading...</h2>;
   }
 
   if (user) {
+    console.log("✅ Welcome user:", user);
     return (
       <div className={styles.welcome}>
         <h1>

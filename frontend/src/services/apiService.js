@@ -43,7 +43,10 @@ api.interceptors.response.use(
       console.error('Server error:', error.response?.data);
     }
     
-    return Promise.reject(error.response?.data || error);
+    return Promise.reject({
+      message: error.response?.data?.message || 'An error occurred',
+      status: error.response?.status,
+    });
   }
 );
 
