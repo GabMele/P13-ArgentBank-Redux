@@ -37,29 +37,31 @@ export const loginUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   'user/login', // Update the slice name to match `user`
-  async (credentials, { dispatch, getState, rejectWithValue }) => {
+  async (credentials, { getState, rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
       console.log("✅ Thunk LOGIN authService response:", response);
 
-      const token = response.body?.token;
+      //const token = response.body?.token;
+      const token = response.token;
 
       if (token) {
         localStorage.setItem('token', token);
-        console.log("✅ Thunk Login->Fetch - Token saved in localStorage, checking if profile is in state...");
+        console.log("✅ Thunk Login - Token saved in localStorage, checking if profile is in state...");
 
         const state = getState(); 
         if (!state.user.user) { 
-          console.log("✅ Thunk Login->Fetch - User not found in state, Fetching profile...");
-          const profileResponse = await dispatch(fetchUserProfile()).unwrap();
-          console.log("✅ Thunk Login->Fetch - Profile fetched:", profileResponse);
-          return { user: profileResponse.user };
+          console.log("✅ Thunk Login - User not found in state, Fetching profile...");
+          //const profileResponse = await dispatch(fetchUserProfile()).unwrap();
+          console.log("Response :", response);
+          const profileResponse = response.user;
+          console.log("✅ Thunk Login - Profile fetched by api login+getProfile:", profileResponse);
+          //return { user: profileResponse.user };
+          return { user: profileResponse };
         } else {
           console.log("⏩ Profile already exists in state, skipped fetch.");
           return { user: state.user.user };
         }
-
-
       }
 
       throw new Error('No token received');

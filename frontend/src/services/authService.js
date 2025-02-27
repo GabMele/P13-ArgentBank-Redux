@@ -9,8 +9,15 @@ export const authService = {
     console.trace(); 
     const response = await api.post('/login', credentials);
     const token = response.data.body?.token;
+    console.log("✅ authService.login() response:", response);
     if (token) localStorage.setItem('token', token);
-    return response.data;
+    
+    const userProfile = await authService.getProfile();
+    console.log("✅ authService.login() userProfile:", userProfile.body);
+    // console.log("✅ authService.login() userProfile:", userProfile.data);
+    
+    //return response.data;
+    return { token, user: userProfile.body };
   },
 
   signup: async (userData) => {
