@@ -1,22 +1,28 @@
 // src/components/NavBar/NavBar.jsx
+import React from 'react';
 import styles from './NavBar.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { logoutUser } from '@/store/authThunks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import argentBankLogo from '@/assets/argentBankLogo.png';
 
-const NavBar = () => {
+const NavBar = React.memo(() => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user?.user);
+  const user = useSelector((state) => state.user?.user, shallowEqual);
   
   // const token = useSelector((state) => state.user.token);
 
   //const state = useSelector((state) => state);
   //console.log("Navbar state", state);
   console.log("Navbar state.user :", user);
+  console.log("Navbar current route location :", useLocation());
+  //console.log("Navbar current route location.pathname :", useLocation().pathname);
+  
+  
+
 
 /*
   useEffect(() => {
@@ -69,6 +75,8 @@ const NavBar = () => {
       </div>
     </nav>
   );
-};
+});
+
+NavBar.displayName = 'NavBar';
 
 export default NavBar;

@@ -6,13 +6,16 @@ import MainLayout from '@/components/MainLayout/MainLayout';
 import HomePage from '@/pages/HomePage';
 import SignInPage from '@/pages/SignInPage';
 import PrivateRoute from '@/components/PrivateRoute/PrivateRoute';
-import Dashboard from '../components/Dashboard/Dashboard';
+import Dashboard from '@/components/Dashboard/Dashboard';
+import NavBar from '@/components/NavBar/NavBar';
+import Footer from '@/components/Footer/Footer';
 
 function AppRouter() {
   const user = useSelector((state) => state.user?.user);
 
   return (
     <Router>
+      <NavBar />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={user 
@@ -26,6 +29,7 @@ function AppRouter() {
           } />
         </Route>
       </Routes>
+      <Footer />
     </Router>
   );
 }
