@@ -51,9 +51,10 @@ export const loginUser = createAsyncThunk(
 
         const state = getState(); 
         if (!state.user.user) { 
+          console.log("✅ Thunk Login - state.user.user:", state.user.user);
           console.log("✅ Thunk Login - User not found in state, Fetching profile...");
           //const profileResponse = await dispatch(fetchUserProfile()).unwrap();
-          console.log("Response :", response);
+          console.log("Thunk Login - Response :", response);
           const profileResponse = response.user;
           console.log("✅ Thunk Login - Profile fetched by api login+getProfile:", profileResponse);
           //return { user: profileResponse.user };
@@ -152,6 +153,26 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 */
+
+
+export const updateUserProfile = createAsyncThunk(
+  'auth/updateUserProfile',
+  async (userData, { rejectWithValue }) => {
+    console.log("✅ AuthThunk UPDATE Profile userData:", userData);
+    try {
+      const response = await authService.updateProfile(userData);
+
+
+      console.log("✅ AuthThunk UPDATE Profile response:", response);
+      //return { user: response.body }; 
+      //return response.body ; 
+      return response ;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Erreur de mise à jour du profil');
+    }
+  }
+);
+
 
 
 // Logout User

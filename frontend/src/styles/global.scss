@@ -12,10 +12,21 @@ html {
 // Body styling to set the layout for the page
 body {
   margin: 0; // Removes default margin around the body element
-  display: flex; // Makes the body a flex container for layout
-  flex-direction: column; // Stacks children vertically (useful for full-page layouts)
+  //display: flex; // Makes the body a flex container for layout
+  //flex-direction: column; // Stacks children vertically (useful for full-page layouts)
   min-height: 100vh; // Ensures the body takes at least 100% of the viewport height
 }
+
+#root { 
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
 
 .sr-only {
   color: red;

@@ -2,5 +2,64 @@
 
 .welcome {
   color: #fff;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.userNames {
+  //margin-bottom: 1.5rem;
+}
+
+.editButton {
+  margin-top: 0.95rem;
+  margin-bottom: 1rem;
+  border-radius: 0px;
+    transition: border-radius 0.3s ease;
+
+  &:hover {
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    transition: box-shadow 0.3s ease, border-radius 0.3s ease;
+  }
+}
+
+.edit {
+  &Inputs {
+    margin-top: 0;
+    display: flex;
+
+    input {
+      margin: 0.5rem;
+      width: 100px;
+      border-radius: 0px;
+    transition: border-radius 0.3s ease;
+
+      &:hover {
+      box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease, 
+        border-radius 0.3s ease;
+      }
+    }
+  }
+
+  &Buttons {
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin: 0.5rem;
+      width: 80px;
+      border-radius: 0px;
+      transition: border-radius 0.3s ease;
+
+      &:hover {
+        font-weight: bold;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        transition: box-shadow 0.3s ease, 
+          border-radius 0.3s ease,
+      }
+    }
+  }
 }

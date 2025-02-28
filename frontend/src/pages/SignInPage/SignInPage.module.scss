@@ -1,15 +1,63 @@
 // src/pages/SignInPage/SignInPage.module.scss
 
-.signInContainer {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
+.error {
+  &Container {
+    margin-bottom: 2rem;
+  }
+  &Text {
+  color: red;
+  font-weight: bold;    
+  }
 }
 
-.error {
-  color: red;
+.signIn {
+  &Container {
+    box-sizing: border-box;
+    background-color: white;
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 3rem;
+    padding: 2rem;
+  }
+  &Icon {
+    font-size: 2rem;
+  }
 }
+
+.input {
+  &Wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 1rem;
+    
+    label {
+      font-weight: bold;
+    }
+
+    input {
+      padding: 5px;
+      font-size: 1.2rem;
+    }
+  }
+  &Remember {
+    display: flex;
+    justify-content: flex-start
+    ;
+
+    input {
+      flex: 0;
+    }
+
+    label {
+      //flex: 1;
+      margin: 0;
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+
 
 form {
   display: flex;

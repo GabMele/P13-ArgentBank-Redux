@@ -4,12 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/authThunks';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignInPage.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, user } = useSelector((state) => state.user);
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ 
+    email: '', 
+    password: '', 
+    rememberMe: false });
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     if (user && !loading) {
@@ -17,11 +23,17 @@ const SignInPage = () => {
       navigate('/dashboard');
       console.log('✅ SignInPage useEffect: NAVIGATE to /dashboard');
     }
-  }, [user, loading,navigate]);
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true); // Show error when it occurs
+    }
+  }, [error]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const handleSubmit = (e) => {
@@ -30,30 +42,44 @@ const SignInPage = () => {
     dispatch(loginUser(credentials));
   };
 
+  const handleDismissError = () => {
+    setShowError(false); // Dismiss the error message
+  };
+
   return (
-    <div className={styles.signInContainer}>
-      <h2>Sign In</h2>
+    <section className={styles.signInContainer}>
+
+      {showError && error && (
+        <div className={styles.errorContainer}>
+          <p className={styles.errorText}>{error}!</p>
+          <button onClick={handleDismissError}>OK, Understood</button>
+        </div>
+      )}
+
+      <FontAwesomeIcon icon={faUserCircle} size={40} className={styles.signInIcon} />
+
+      <h1>Sign In</h1>
       {error && <p className={styles.error}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className={styles.inputWrapper}>
+          <label htmlFor="username">Username</label>
           <input
-            id="email"
             type="email"
+            id="email"
             name="email"
-            value={credentials.email}
+            value={credentials.username}
             onChange={handleChange}
             required
             autoComplete="email"
           />
         </div>
 
-        <div>
+        <div className={styles.inputWrapper}>
           <label htmlFor="password">Password</label>
           <input
-            id="password"
             type="password"
+            id="password"
             name="password"
             value={credentials.password}
             onChange={handleChange}
@@ -62,11 +88,22 @@ const SignInPage = () => {
           />
         </div>
 
-        <button type="submit" disabled={loading}>
+        <div className={styles.inputRemember}>
+          <input
+            type="checkbox"
+            id="remember-me"
+            name="rememberMe"
+            checked={credentials.rememberMe}
+            onChange={handleChange}
+          />
+          <label htmlFor="remember-me">Remember me</label>
+        </div>
+
+        <button type="submit" className={styles.signInButton} disabled={loading}>
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
-    </div>
+    </section>
   );
 };
 

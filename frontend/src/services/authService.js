@@ -6,18 +6,18 @@ import api from '@/services/apiService';
 export const authService = {
   login: async (credentials) => {
     console.log("✅ authService.login() called");
-    console.trace(); 
+    //console.trace(); 
     const response = await api.post('/login', credentials);
     const token = response.data.body?.token;
     console.log("✅ authService.login() response:", response);
     if (token) localStorage.setItem('token', token);
     
-    const userProfile = await authService.getProfile();
-    console.log("✅ authService.login() userProfile:", userProfile.body);
-    // console.log("✅ authService.login() userProfile:", userProfile.data);
+    const userProfileResponse = await authService.getProfile();
+    console.log("✅ authService.login() userProfileResponse:", userProfileResponse.body);
+    // console.log("✅ authService.login() userProfileResponse:", userProfileResponse.data);
     
     //return response.data;
-    return { token, user: userProfile.body };
+    return { token, user: userProfileResponse.body };
   },
 
   signup: async (userData) => {
@@ -31,8 +31,18 @@ export const authService = {
 
   getProfile: async () => {
     console.log("✅ authService.getProfile() called");
-    console.trace(); 
+    //console.trace(); 
     const response = await api.post('/profile'); 
     return response.data;
+  },
+
+  updateProfile: async (userData) => {
+    console.log("✅ authService.updateProfile() called");
+    const response = await api.put('/profile', userData);
+    console.log("✅ authService.updateProfile() response:", response);
+    return { user: response.data.body } ;
+    // return response.data;
   }
+
+
 };
