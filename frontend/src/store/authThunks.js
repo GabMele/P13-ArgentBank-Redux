@@ -58,7 +58,7 @@ export const loginUser = createAsyncThunk(
           const profileResponse = response.user;
           console.log("✅ Thunk Login - Profile fetched by api login+getProfile:", profileResponse);
           //return { user: profileResponse.user };
-          return { user: profileResponse };
+          return { user: profileResponse, token };
         } else {
           console.log("⏩ Profile already exists in state, skipped fetch.");
           return { user: state.user.user };
