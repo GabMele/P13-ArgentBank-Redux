@@ -1,184 +1,188 @@
 // src/store/authThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { authService } from '../services/authService';
+import authService from '@/services/authService';
+import handleAuthStorage from '@/utils/handleAuthStorage';
 
-// Login User
-/*
+const debugPrefix = 'authThunks -> ';
+
+/**
+ * This module contains asynchronous thunk actions for authentication 
+ * (login, signup, profile fetching, updating, and logout) as well as 
+ * utility functions for managing authentication-related data in localStorage.
+ * 
+ * It uses Redux Toolkit's `createAsyncThunk` for handling asynchronous 
+ * actions and error handling. Each action interacts with the `authService` 
+ * to perform the necessary API calls for user authentication and profile management.
+ * 
+ * The following actions are available:
+ * - loginUser: Logs in a user and stores the authentication token.
+ * - signupUser: Registers a new user.
+ * - fetchUserProfile: Fetches the current user's profile.
+ * - updateUserProfile: Updates the user's profile.
+ * - logoutUser: Logs out the user and clears the authentication data from storage.
+ * 
+ * Additionally, the module includes helper functions for managing 
+ * the authentication token and user data in localStorage.
+ */
+
+// ========================
+// LOGIN THUNK
+// ========================
+
+/**
+ * Asynchronous thunk action for logging in a user.
+ * @function
+ * @param {Object} credentials - User credentials for login.
+ * @param {Object} param1 - Thunk API helpers.
+ * @param {Function} param1.getState - Function to get the current Redux state.
+ * @param {Function} param1.rejectWithValue - Function to reject the action with a specific value.
+ * @returns {Promise<Object>} - The user's data and authentication token if successful.
+ * @throws {Error} - If login fails or no token is received.
+ */
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials, { dispatch, rejectWithValue }) => {
-    try {
-      const response = await authService.login(credentials);
-      console.log("✅ AuthThunkLogin response:", response); 
-
-      const token = response.body?.token;
-
-      if (token) {
-        localStorage.setItem('token', token);
-        console.log("✅ Token saved, fetching profile..."); // Debug
-
-        // const profileResponse = await dispatch(fetchUserProfile()).unwrap();
-        const profileResponse = await dispatch(fetchUserProfile());
-        
-
-        console.log("✅ Profile fetched:", profileResponse); // Debug
-
-        return { user: profileResponse.user };
-      }
-
-      throw new Error('No token received');
-    } catch (error) {
-      console.error("❌ Login error:", error); // Debug
-      return rejectWithValue(error.response?.data?.message || 'Erreur de connexion');
-    }
-  }
-);
-*/
-
-export const loginUser = createAsyncThunk(
-  'user/login', // Update the slice name to match `user`
   async (credentials, { getState, rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      console.log("✅ Thunk LOGIN authService response:", response);
+      console.debug(debugPrefix + '✅ LOGIN authService response OK');
 
-      //const token = response.body?.token;
-      const token = response.token;
+      if (!response.token) throw new Error('No token received');
 
-      if (token) {
-        localStorage.setItem('token', token);
-        console.log("✅ Thunk Login - Token saved in localStorage, checking if profile is in state...");
-
-        const state = getState(); 
-        if (!state.user.user) { 
-          console.log("✅ Thunk Login - state.user.user:", state.user.user);
-          console.log("✅ Thunk Login - User not found in state, Fetching profile...");
-          //const profileResponse = await dispatch(fetchUserProfile()).unwrap();
-          console.log("Thunk Login - Response :", response);
-          const profileResponse = response.user;
-          console.log("✅ Thunk Login - Profile fetched by api login+getProfile:", profileResponse);
-          //return { user: profileResponse.user };
-          return { user: profileResponse, token };
-        } else {
-          console.log("⏩ Profile already exists in state, skipped fetch.");
-          return { user: state.user.user };
-        }
+      console.debug(debugPrefix + '✅ LOGIN - token received:', response.token);
+      
+      //handleAuthStorage.set(response.token);
+      
+      const currentUser = getState().user.user;
+      const user = currentUser || response.user;
+      
+      if (!currentUser) {
+        console.debug(`${debugPrefix}✅ LOGIN - user not in state, using response.user`);
+      } else {
+        console.debug(`${debugPrefix}⏩ LOGIN - Using user from state`);
       }
+      
+      return { user, token: response.token };      
 
-      throw new Error('No token received');
     } catch (error) {
-      console.error("❌ Login error:", error);
-      return rejectWithValue(error.response?.data?.message || 'Erreur de connexion');
+      console.error(debugPrefix + '❌ LOGIN error:', error);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Login failed'
+      );
     }
   }
 );
 
+// ========================
+// SIGNUP THUNK
+// ========================
 
-
-// Signup User
+/**
+ * Asynchronous thunk action for registering a new user.
+ * @function
+ * @param {Object} userData - The data required for user registration.
+ * @param {Object} param1 - Thunk API helpers.
+ * @param {Function} param1.rejectWithValue - Function to reject the action with a specific value.
+ * @returns {Promise<Object>} - The response body from the registration service.
+ * @throws {Error} - If the registration fails.
+ */
 export const signupUser = createAsyncThunk(
   'auth/signup',
   async (userData, { rejectWithValue }) => {
     try {
       const response = await authService.signup(userData);
+      console.debug(debugPrefix + '✅ SIGNUP successful for:', userData.email);
       return response.body;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Erreur d\'inscription');
+      console.error(debugPrefix + '❌ SIGNUP error:', error);
+      return rejectWithValue(
+        error.response?.data?.message || 'Registration failed'
+      );
     }
   }
 );
 
-// Fetch User Profile
-/*
+// ========================
+// FETCH PROFILE THUNK
+// ========================
+
+/**
+ * Asynchronous thunk action for fetching the user's profile.
+ * @function
+ * @param {undefined} _ - Unused parameter (required for consistency with `createAsyncThunk`).
+ * @param {Object} param1 - Thunk API helpers.
+ * @param {Function} param1.getState - Function to get the current Redux state.
+ * @param {Function} param1.rejectWithValue - Function to reject the action with a specific value.
+ * @returns {Promise<Object>} - The user's profile data.
+ * @throws {Error} - If fetching the profile fails.
+ */
 export const fetchUserProfile = createAsyncThunk(
   'auth/fetchProfile',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await authService.getProfile();
-      return response.body;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Erreur de chargement du profil');
-    }
-  }
-);
-*/
-
-
-export const fetchUserProfile = createAsyncThunk(
-  'auth/fetchProfile',
-  async (_, { getState,rejectWithValue }) => {
-    try {
-      // Only fetch if we have a token but no user
-      const state = getState();
-      console.log("✅ Thunk FETCH - check Redux state:", state);
-      if (state.user.user) {
-        console.log(`⏩ FetchThunk: User already in state, 
-          skipping profile fetch `, state.user.user);
-        return { user: state.user.user };
-      }
-
-      const response = await authService.getProfile();
-
-      console.log("✅ AuthThunk FETCH Profile response:", response);
-      console.log("✅ AuthThunk FETCH Profile body:", response.body);
-
-      return { user: response.body }; 
-    } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      return rejectWithValue(error.response?.data?.message || 'Erreur de chargement du profil');
-    }
-  }
-);
-
-
-/*
-export const fetchUserProfile = createAsyncThunk(
-  "user/fetchProfile",
   async (_, { getState, rejectWithValue }) => {
-    const state = getState();
-    
-    // ✅ If user already exists, avoid fetching again
-    if (state.user.user) {
-      console.log("🛑 Skipping fetchUserProfile: User already exists.");
-      return rejectWithValue("User already exists.");
+    const currentUser = getState().user.user;
+
+    if (currentUser) {
+      console.debug(`${debugPrefix}⏩ FetchProfile: user already in state`);
+      return { user: currentUser };
     }
 
     try {
       const response = await authService.getProfile();
-      return response.body;
+      console.debug(debugPrefix + '✅ FETCH PROFILE response:')
+      return { user: response.body };
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error(debugPrefix + "❌ FetchProfile error:", error);
+      handleAuthStorage.clear();
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to load profile'
+      );
     }
   }
 );
-*/
 
+// ========================
+// UPDATE PROFILE THUNK
+// ========================
 
+/**
+ * Asynchronous thunk action for updating the user's profile.
+ * @function
+ * @param {Object} userData - The updated user profile data.
+ * @param {Object} param1 - Thunk API helpers.
+ * @param {Function} param1.rejectWithValue - Function to reject the action with a specific value.
+ * @returns {Promise<Object>} - The updated user profile response.
+ * @throws {Error} - If updating the profile fails.
+ */
 export const updateUserProfile = createAsyncThunk(
   'auth/updateUserProfile',
   async (userData, { rejectWithValue }) => {
-    console.log("✅ AuthThunk UPDATE Profile userData:", userData);
     try {
       const response = await authService.updateProfile(userData);
-
-
-      console.log("✅ AuthThunk UPDATE Profile response:", response);
-      //return { user: response.body }; 
-      //return response.body ; 
-      return response ;
+      console.debug(debugPrefix + '✅ UPDATE PROFILE response OK');
+      return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Erreur de mise à jour du profil');
+      console.error(debugPrefix + '❌ UPDATE PROFILE error:', error);
+      return rejectWithValue(
+        error.response?.data?.message || 'Update failed'
+      );
     }
   }
 );
 
+// ========================
+// LOGOUT THUNK
+// ========================
 
-
-// Logout User
-export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  authService.logout();
-  return null;
-});
+/**
+ * Asynchronous thunk action for logging out the user.
+ * @function
+ * @returns {null} - No return value, as the user is logged out and storage is cleared.
+ */
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async () => {
+    console.debug(debugPrefix + '▶ LOGOUT called');
+    handleAuthStorage.clear();
+    authService.logout();
+    return null;
+  }
+);

@@ -7,6 +7,7 @@ import HomePage from '@/pages/HomePage';
 import SignInPage from '@/pages/SignInPage';
 import PrivateRoute from '@/components/PrivateRoute/PrivateRoute';
 import Dashboard from '@/components/Dashboard/Dashboard';
+import ProfilePage from '@/pages/ProfilePage';
 import NavBar from '@/components/NavBar/NavBar';
 import Footer from '@/components/Footer/Footer';
 
@@ -25,6 +26,11 @@ function AppRouter() {
           <Route path="/dashboard" element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          } />
+          <Route path="/profilepage" element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           } />
         </Route>

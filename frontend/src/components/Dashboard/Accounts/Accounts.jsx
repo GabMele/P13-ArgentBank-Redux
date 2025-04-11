@@ -37,7 +37,7 @@ const Accounts = ({ accounts }) => {
       ? reduxAccounts
       : dummyAccounts;
 
-      console.log("accountsData render:", accountsData);
+      console.debug("accountsData render:", accountsData);
   return (
     <section className={styles.accountsWrapper}>
       <h2 className="sr-only">Accounts</h2>

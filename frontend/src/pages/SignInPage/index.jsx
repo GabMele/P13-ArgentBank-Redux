@@ -19,9 +19,9 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (user && !loading) {
-      console.log('✅ SignInPage useEffect: User updated: ', user);
+      console.debug('✅ SignInPage useEffect: User updated: ', user);
       navigate('/dashboard');
-      console.log('✅ SignInPage useEffect: NAVIGATE to /dashboard');
+      console.debug('✅ SignInPage useEffect: NAVIGATE to /dashboard');
     }
   }, [user, loading, navigate]);
 
@@ -38,7 +38,7 @@ const SignInPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Signin dispatch loginUser with Credentials:', credentials);
+    console.debug('Signin dispatch loginUser with Credentials:', credentials);
     dispatch(loginUser(credentials));
   };
 
@@ -49,17 +49,15 @@ const SignInPage = () => {
   return (
     <section className={styles.signInContainer}>
 
-      {showError && error && (
-        <div className={styles.errorContainer}>
-          <p className={styles.errorText}>{error}!</p>
-          <button onClick={handleDismissError}>OK, Understood</button>
-        </div>
-      )}
-
       <FontAwesomeIcon icon={faUserCircle} size={40} className={styles.signInIcon} />
 
       <h1>Sign In</h1>
-      {error && <p className={styles.error}>{error}</p>}
+      {showError && error && (
+        <div className={styles.errorContainer}>
+          <p className={styles.errorText}>{error}</p>
+          <button onClick={handleDismissError}>OK, understood</button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>

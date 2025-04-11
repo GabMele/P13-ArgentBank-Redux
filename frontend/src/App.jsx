@@ -10,15 +10,18 @@ function App() {
   const token = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user?.user);
 
+  console.debug("App token:", token);
+  console.debug("App user:", user);
+  console.debug("App state:", useSelector((state) => state.user));
   
   // This effect only runs on initial load or refresh to restore session
   useEffect(() => {
     // Only fetch profile on page load/refresh if we have a token but no user data
     if (token && !user) {
-      console.log("✅App useEffect: Restoring session from token, dispatch fetchUserProfile...");
+      console.debug("✅App useEffect: Restoring session from token, dispatch fetchUserProfile...");
       dispatch(fetchUserProfile());
     }
-  }, []);  // Empty dependency array - only run once on mount
+  }, [dispatch, token, user]);  // Empty dependency array - only run once on mount
 
 
   return (

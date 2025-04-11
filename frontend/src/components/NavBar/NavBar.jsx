@@ -16,10 +16,10 @@ const NavBar = React.memo(() => {
   // const token = useSelector((state) => state.user.token);
 
   //const state = useSelector((state) => state);
-  //console.log("Navbar state", state);
-  console.log("Navbar state.user :", user);
-  console.log("Navbar current route location :", useLocation());
-  //console.log("Navbar current route location.pathname :", useLocation().pathname);
+  //console.debug("Navbar state", state);
+  console.debug("Navbar state.user :", user);
+  console.debug("Navbar current route location :", useLocation());
+  //console.debug("Navbar current route location.pathname :", useLocation().pathname);
   
   
 
@@ -36,12 +36,12 @@ const NavBar = React.memo(() => {
   useEffect(() => {
     // Check both user and token to determine if we need to fetch profile
     if (token && !user) {
-      console.log("✅UseEffect: User not found, fetching profile...");
-      //console.log("✅UseEffect before despatch: state:", state);
+      console.debug("✅UseEffect: User not found, fetching profile...");
+      //console.debug("✅UseEffect before despatch: state:", state);
       dispatch(fetchUserProfile());
-      console.log("✅UseEffect: Profile fetched.");
-      console.log("✅UseEffect: User:", user);
-      //console.log("✅UseEffect after dispatch: state:", state);
+      console.debug("✅UseEffect: Profile fetched.");
+      console.debug("✅UseEffect: User:", user);
+      //console.debug("✅UseEffect after dispatch: state:", state);
     }
   }, [dispatch, user, token]);
 */
@@ -60,7 +60,7 @@ const NavBar = React.memo(() => {
       <div>
         {user ? (
           <>
-            <Link className={styles.mainNavItem} to="/profile">
+            <Link className={styles.mainNavItem} to="/profilepage">
               <FontAwesomeIcon icon={faUserCircle} /> {user.firstName}
             </Link>
             <button className={styles.mainNavItem} onClick={handleLogout}>

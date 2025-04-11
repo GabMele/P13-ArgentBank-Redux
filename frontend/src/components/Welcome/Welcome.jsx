@@ -11,7 +11,7 @@ const Welcome = () => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log("✅ Welcome BEFORE - user:", user);
+  console.debug("✅ Welcome BEFORE - user:", user);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,7 +29,7 @@ const Welcome = () => {
     dispatch(updateUserProfile({ firstName, lastName }))
       .unwrap()
       .then(() => {
-        console.log("✅ Profile updated successfully");
+        console.debug("✅ Profile updated successfully");
         setIsEditing(false);
       })
       .catch((error) => {
@@ -58,7 +58,7 @@ const Welcome = () => {
   }
 
   if (user) {
-    console.log("✅ Welcome user:", user);
+    console.debug("✅ Welcome user:", user);
     return (
       <div className={styles.welcome}>
         <h1>
