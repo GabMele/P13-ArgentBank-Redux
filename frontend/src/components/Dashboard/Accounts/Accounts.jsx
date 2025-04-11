@@ -1,3 +1,20 @@
+// src/components/Accounts/Accounts.jsx
+/**
+ * Accounts component displays a list of user accounts, either from the 
+ * provided `accounts` prop, Redux state, or fallback to dummy data.
+ * 
+ * It uses `safeAccounts` to ensure that the provided `accounts` prop is 
+ * safely used. If no `accounts` prop is passed, it defaults to using 
+ * `reduxAccounts` from the Redux store, or dummy data if neither are available.
+ * 
+ * Each account displays:
+ * - The account title (e.g., checking, savings, credit card).
+ * - The account balance or amount.
+ * - The account description (e.g., Available Balance, Current Balance).
+ * 
+ * This component also includes the `Account` subcomponent for rendering 
+ * each individual account's details.
+ */
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import styles from "./Accounts.module.scss";
@@ -22,8 +39,12 @@ Account.propTypes = {
 };
 
 const Accounts = ({ accounts }) => {
+  /**
+   * `safeAccounts` ensures that the provided `accounts` prop is used safely.
+   * If no prop is passed, it defaults to an empty array to avoid runtime errors.
+   */
   const reduxAccounts = useSelector((state) => state?.accounts?.data) || [];
-  const safeAccounts = accounts || [];
+  const safeAccounts = accounts || [];  // Default to an empty array if no prop is provided.
 
   const dummyAccounts = [
     { title: "Argent Bank Checking (x8349)", amount: "$2,082.79", description: "Available Balance" },
@@ -37,7 +58,7 @@ const Accounts = ({ accounts }) => {
       ? reduxAccounts
       : dummyAccounts;
 
-      console.debug("accountsData render:", accountsData);
+  console.debug("accountsData render:", accountsData);
   return (
     <section className={styles.accountsWrapper}>
       <h2 className="sr-only">Accounts</h2>

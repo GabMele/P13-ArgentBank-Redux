@@ -1,4 +1,17 @@
 // src/components/FeaturesSection/FeaturesSection.jsx
+/**
+ * FeaturesSection component renders a section displaying a list of features 
+ * related to the service or product. Each feature is represented by an icon, 
+ * a title, and a description. 
+ * 
+ * The content is dynamically populated using the `LABELS` configuration, 
+ * specifically the `featuresSection` object, which provides the heading 
+ * and the individual feature details.
+ * 
+ * - `features.heading`: The main heading of the features section.
+ * - `features.feature`: An array of feature objects, each containing 
+ *   an `icon`, `title`, and `description`.
+ */
 import Feature from './Feature/Feature';
 import styles from './FeaturesSection.module.scss';
 import { LABELS } from '@/config'; 

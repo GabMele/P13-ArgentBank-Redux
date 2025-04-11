@@ -1,26 +1,48 @@
 // src/services/authService.js
 
+/**
+ * Authentication Service (authService)
+ * 
+ * This service manages the authentication flow for the user, including login,
+ * signup, session management (login/logout), and user profile management.
+ * 
+ * It interacts with the backend API for user authentication, handling user
+ * credentials during login and retrieving/updating
+ * the user's profile.
+ * 
+ * ## Key Features:
+ * - **Login:** Authenticates the user by sending credentials (email, password)
+ *   to the backend. If successful, it stores the authentication token and
+ *   retrieves the user profile.
+ * - **Signup:** Allows a new user to register by submitting their details (email,
+ *   name) to the backend, enabling the creation of a new account.
+ * - **Logout:** Clears the authentication token from storage, logging the user
+ *   out and terminating the session.
+ * - **Profile Management:** Allows retrieval and updating of the authenticated
+ *   user's profile information, such as first name, last name, etc.
+ * 
+ */
+
 import api from '@/services/apiService';
 import handleAuthStorage from '@/utils/handleAuthStorage';
 
 const debugPrefix = 'authService -> ';
 
-/**
- * Authentication service for handling user authentication and profile management
- * @namespace authService
- */
 const authService = {
   // ========================
   // AUTHENTICATION METHODS
   // ========================
 
   /**
-   * Logs in a user with provided credentials
+   * Logs in a user with provided credentials.
+   * This method sends a POST request to the server with the user's credentials 
+   * and handles the response
+   *
    * @param {Object} credentials - User credentials
-   * @param {string} credentials.email - User's email
+   * @param {string} credentials.email - User's email address
    * @param {string} credentials.password - User's password
-   * @returns {Promise<{token: string, user: Object}>} Object containing auth token and user profile
-   * @throws {Error} If login fails or network error occurs
+   * @returns {Promise<{token: string, user: Object}>} An object containing the auth token and the user profile data
+   * @throws {Error} Throws an error if login fails, the network is unavailable, or server response is invalid
    */
   async login(credentials) {
     try {
@@ -36,13 +58,13 @@ const authService = {
       }
 
       const token = response.data.body?.token;
-      console.debug(debugPrefix, '✅ login() successful, token received : ', token);
+      console.debug(debugPrefix, '✅ login() successful, token received:', token);
 
       if (!token) {
         throw new Error('No token received');
       }
 
-      handleAuthStorage.set({token: token});
+      handleAuthStorage.set({ token: token });
       
       const userProfileResponse = await this.getProfile();
       console.debug(debugPrefix, '✅ login()->getProfile(), user profile loaded:', {
@@ -74,10 +96,15 @@ const authService = {
   },
 
   /**
-   * Registers a new user
-   * @param {Object} userData - User registration data
-   * @returns {Promise<Object>} Response data from the server
-   * @throws {Error} If registration fails
+   * Registers a new user by sending a POST request with the user data.
+   * If successful, returns the server's response data.
+   * 
+   * @param {Object} userData - New user registration data
+   * @param {string} userData.email - User's email address
+   * @param {string} userData.firstName - User's first name
+   * @param {string} userData.lastName - User's last name
+   * @returns {Promise<Object>} The server's response data from the registration request
+   * @throws {Error} Throws an error if registration fails
    */
   async signup(userData) {
     try {
@@ -104,11 +131,12 @@ const authService = {
   // ========================
 
   /**
-   * Logs out the current user by removing the auth token
+   * Logs out the current user by clearing the auth token from storage.
+   * This action removes the user's session and prevents unauthorized access.
    */
   logout() {
     console.debug(debugPrefix, 'logout() called, removing token...');
-    localStorage.removeItem('token');
+    handleAuthStorage.clear();
   },
 
   // ========================
@@ -117,14 +145,16 @@ const authService = {
 
   /**
    * Retrieves the current user's profile
-   * @returns {Promise<Object>} User profile data
-   * @throws {Error} If profile retrieval fails
+   * The server is expected to return the profile data associated with the authenticated user.
+   *
+   * @returns {Promise<Object>} The user's profile data
+   * @throws {Error} Throws an error if profile retrieval fails
    */
   async getProfile() {
     try {
       console.debug(debugPrefix, 'getProfile() called');
       const response = await api.post('/profile');
-      console.debug(debugPrefix, '✅ getProfile() successful with' + response.data);
+      console.debug(debugPrefix, '✅ getProfile() successful with', response.data);
       return response.data;
     } catch (error) {
       console.error(debugPrefix, 'getProfile() error:', error);
@@ -136,10 +166,15 @@ const authService = {
   },
 
   /**
-   * Updates the current user's profile
-   * @param {Object} userData - Updated user data
-   * @returns {Promise<{user: Object}>} Updated user profile
-   * @throws {Error} If profile update fails
+   * Updates the current user's profile with new data.
+   * The method sends a PUT request with the updated user information and returns 
+   * the updated profile data.
+   *
+   * @param {Object} userData - Updated user profile data
+   * @param {string} userData.firstName - Updated first name
+   * @param {string} userData.lastName - Updated last name
+   * @returns {Promise<{user: Object}>} The updated user profile data
+   * @throws {Error} Throws an error if profile update fails
    */
   async updateProfile(userData) {
     try {

@@ -1,10 +1,35 @@
 // src/components/Dashboard/Welcome/Welcome.jsx
 
+/**
+ * Welcome component displays a personalized greeting and user profile information.
+ * 
+ * @module Welcome
+ * @description This component serves as the dashboard welcome section that:
+ * - Displays a personalized welcome message with the user's first and last name
+ * - Provides functionality to edit and update the user's name
+ * - Manages local state for editing mode and form inputs
+ * - Integrates with Redux for user data and profile updates
+ * - Handles loading and error states gracefully
+ * 
+ * @example
+ * // Import and use in a parent component
+ * import Welcome from './Welcome/Welcome';
+ * 
+ * function Dashboard() {
+ *   return (
+ *     <div>
+ *       <Welcome />
+ *     </div>
+ *   );
+ * }
+ * 
+ * @returns {React.ReactElement} The Welcome component JSX
+ */
+
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserProfile } from "@/store/authThunks";
 import styles from "./Welcome.module.scss";
-
 const Welcome = () => {
   const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -16,6 +41,10 @@ const Welcome = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   
+  /**
+   * Effect hook to synchronize local state with Redux user data.
+   * @listens user
+   */
   useEffect(() => {
     if (user) {
       setFirstName(user.firstName);
@@ -23,7 +52,13 @@ const Welcome = () => {
     }
   }, [user]); 
 
-
+  /**
+   * Handles saving the edited user profile.
+   * @function handleSave
+   * @async
+   * @description Dispatches the updateUserProfile action with new name values,
+   * handles success/error cases, and exits edit mode.
+   */
   const handleSave = () => {
     // Save the edited user data to the server
     dispatch(updateUserProfile({ firstName, lastName }))
@@ -39,12 +74,22 @@ const Welcome = () => {
     setIsEditing(false);
   };
 
+  /**
+   * Handles canceling the edit operation.
+   * @function handleCancel
+   * @description Resets the name fields to their original values and exits edit mode.
+   */
   const handleCancel = () => {
     setFirstName(user.firstName);
     setLastName(user.lastName);
     setIsEditing(false);
   };
 
+  /**
+   * Handles entering edit mode.
+   * @function handleEdit
+   * @description Enables the edit mode for user name fields.
+   */
   const handleEdit = () => {
     setIsEditing(true);
   };

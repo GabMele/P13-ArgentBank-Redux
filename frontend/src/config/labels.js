@@ -1,11 +1,38 @@
 // src/config/labels.js
 
+/**
+ * Labels translations for different languages.
+ * 
+ * This object contains the translation data for the UI text, including
+ * section headings, feature descriptions, and hero text for multiple
+ * languages. The selected language is used to retrieve the appropriate
+ * labels for rendering the UI.
+ * 
+ * Supported languages:
+ * - English (en)
+ * - French (fr)
+ * 
+ * @constant {Object} LABELS_TRANSLATIONS
+ * @type {Object}
+ * @property {Object} en - Translations for the English language.
+ * @property {Object} fr - Translations for the French language.
+ * 
+ * @example
+ * // Retrieve English labels
+ * const englishLabels = LABELS_TRANSLATIONS.en;
+ * 
+ * @example
+ * // Retrieve French labels
+ * const frenchLabels = LABELS_TRANSLATIONS.fr;
+ */
+
 // Dynamically import language and assets
 import iconChat from "@/assets/icon-chat.png";
 import iconMoney from "@/assets/icon-money.png";
 import iconSecurity from "@/assets/icon-security.png";
 
-// Set the default language, which could be dynamically changed (e.g., via user settings)
+// Set the default language, which could be dynamically changed (e.g., via user
+// settings)
 const LANGUAGE = "en";
 
 const LABELS_TRANSLATIONS = {
@@ -16,17 +43,20 @@ const LABELS_TRANSLATIONS = {
         {
           icon: iconChat,
           title: "You are our #1 priority",
-          description: "Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes."
+          description: "Need to talk to a representative? You can get in touch " +
+            "through our 24/7 chat or through a phone call in less than 5 minutes."
         },
         {
           icon: iconMoney,
           title: "More savings means higher rates",
-          description: "The more you save with us, the higher your interest rate will be!"
+          description: "The more you save with us, the higher your interest rate " +
+            "will be!"
         },
         {
           icon: iconSecurity,
           title: "Security you can trust",
-          description: "We use top-of-the-line encryption to make sure your data and money are always safe."
+          description: "We use top-of-the-line encryption to make sure your data " +
+            "and money are always safe."
         }
       ]
     },
@@ -43,22 +73,26 @@ const LABELS_TRANSLATIONS = {
         {
           icon: iconChat,
           title: "Vous êtes notre priorité n°1",
-          description: "Besoin de parler à un représentant ? Vous pouvez nous contacter via notre chat 24/7 ou par téléphone en moins de 5 minutes."
+          description: "Besoin de parler à un représentant ? Vous pouvez nous " +
+            "contacter via notre chat 24/7 ou par téléphone en moins de 5 minutes."
         },
         {
           icon: iconMoney,
           title: "Plus d'économies signifie des taux plus élevés",
-          description: "Plus vous épargnez avec nous, plus votre taux d'intérêt sera élevé !"
+          description: "Plus vous épargnez avec nous, plus votre taux d'intérêt " +
+            "sera élevé !"
         },
         {
           icon: iconSecurity,
           title: "Une sécurité de confiance",
-          description: "Nous utilisons un chiffrement de pointe pour garantir que vos données et votre argent sont toujours en sécurité."
+          description: "Nous utilisons un chiffrement de pointe pour garantir " +
+            "que vos données et votre argent sont toujours en sécurité."
         }
       ]
     },
     hero: {
-      subtitle: ["Aucuns frais.", "Pas de dépôt minimum.", "Taux d'intérêt élevés."],
+      subtitle: ["Aucuns frais.", "Pas de dépôt minimum.", "Taux d'intérêt " +
+        "élevés."],
       text: "Ouvrez un compte d'épargne chez Argent Bank aujourd'hui !",
       srOnly: "Contenu promu"
     }

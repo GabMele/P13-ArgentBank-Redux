@@ -1,11 +1,29 @@
 // src/services/apiService.js
 
 /**
- * This is our main API service that handles all communication with the backend.
- * It automatically adds the auth token to requests and handles common errors.
+ * @file apiService.js
+ * @description Axios instance configured for API communication. It sets
+ * the base URL, applies global headers, and uses request and response
+ * interceptors to handle authentication and logging.
+ *
+ * The auth token is retrieved from localStorage (not Redux) and attached
+ * to outgoing requests if available. This enables authenticated endpoints
+ * even on first load before Redux is populated.
+ *
+ * On 401 errors, the service removes the token from localStorage to prevent
+ * usage of expired or invalid tokens. All requests and responses are logged
+ * (if mode not "production") for easier debugging.
+ *
+ * @module apiService
  */
 
+/**
+ * Axios instance for communicating with the backend API.
+ * Adds the token from localStorage (if present) to all requests,
+ * and handles response logging and auth error handling.
+ */
 import axios from 'axios';
+import handleAuthStorage from '@/utils/handleAuthStorage';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1/user',
@@ -26,7 +44,7 @@ const debugPrefix = 'API Service ->';
  * - Logs the request details
  */
 const addAuthToken = (config) => {
-  const token = localStorage.getItem('token');
+  const token = handleAuthStorage.getToken();
 
   console.debug("📦 Token used for request:", token);
 

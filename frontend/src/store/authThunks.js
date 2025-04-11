@@ -8,7 +8,7 @@ const debugPrefix = 'authThunks -> ';
 /**
  * This module contains asynchronous thunk actions for authentication 
  * (login, signup, profile fetching, updating, and logout) as well as 
- * utility functions for managing authentication-related data in localStorage.
+ * utility function for managing authentication-related data in localStorage.
  * 
  * It uses Redux Toolkit's `createAsyncThunk` for handling asynchronous 
  * actions and error handling. Each action interacts with the `authService` 
@@ -21,8 +21,6 @@ const debugPrefix = 'authThunks -> ';
  * - updateUserProfile: Updates the user's profile.
  * - logoutUser: Logs out the user and clears the authentication data from storage.
  * 
- * Additionally, the module includes helper functions for managing 
- * the authentication token and user data in localStorage.
  */
 
 // ========================
@@ -48,22 +46,20 @@ export const loginUser = createAsyncThunk(
 
       if (!response.token) throw new Error('No token received');
 
-      console.debug(debugPrefix + '✅ LOGIN - token received:', response.token);
+      // Prefer fresh user data from login response, 
+      // but fall back to existing state if for some reason 
+      // the response doesn't contain user data
+      const user = response.user || getState().user.user;
       
-      //handleAuthStorage.set(response.token);
-      
-      const currentUser = getState().user.user;
-      const user = currentUser || response.user;
-      
-      if (!currentUser) {
-        console.debug(`${debugPrefix}✅ LOGIN - user not in state, using response.user`);
-      } else {
-        console.debug(`${debugPrefix}⏩ LOGIN - Using user from state`);
+      if (!user) {
+        console.warn('Login successful but no user data received');
+        // Optionally fetch profile here if needed
       }
-      
+
       return { user, token: response.token };      
 
     } catch (error) {
+      handleAuthStorage.clear();
       console.error(debugPrefix + '❌ LOGIN error:', error);
       return rejectWithValue(
         error.response?.data?.message || error.message || 'Login failed'
@@ -181,7 +177,6 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async () => {
     console.debug(debugPrefix + '▶ LOGOUT called');
-    handleAuthStorage.clear();
     authService.logout();
     return null;
   }
