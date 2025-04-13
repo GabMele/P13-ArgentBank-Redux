@@ -35,9 +35,6 @@ const Welcome = () => {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(false);
-
-  console.debug("✅ Welcome BEFORE - user:", user);
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   
@@ -103,7 +100,6 @@ const Welcome = () => {
   }
 
   if (user) {
-    console.debug("✅ Welcome user:", user);
     return (
       <div className={styles.welcome}>
         <h1>

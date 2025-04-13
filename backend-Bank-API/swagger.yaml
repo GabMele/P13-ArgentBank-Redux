@@ -275,6 +275,16 @@ paths:
           description: ID of the account
           required: false
           type: string
+        - in: query
+          name: category
+          description: Category of the transactions
+          required: false
+          type: string
+        - in: query
+          name: type
+          description: Type of the transactions
+          required: false
+          type: string
       produces:
         - application/json
       responses:
@@ -427,6 +437,9 @@ definitions:
         $ref: '#/definitions/Account'
   Transaction:
     properties:
+      transactionId:
+        type: string
+        description: Transaction ID
       accountId:
         type: string
         description: Account ID
@@ -436,6 +449,15 @@ definitions:
       description:
         type: string
         description: Transaction description
+      type:
+        type: string
+        description: Transaction type
+      category:
+        type: string
+        description: Transaction category
+      notes:
+        type: string
+        description: Transaction notes
       date:
         type: string
         format: date-time
